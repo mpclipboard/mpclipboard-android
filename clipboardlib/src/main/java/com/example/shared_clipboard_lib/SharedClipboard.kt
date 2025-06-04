@@ -7,7 +7,7 @@ class SharedClipboard {
         private var config: Long? = null
         private var poller: Poller? = null
 
-        fun reconfigure(url: String, token: String, name: String) {
+        fun reconfigure(endpoint: String, token: String, name: String) {
             if (!isInitialized) {
                 JniBridge.init()
                 JniBridge.shared_clipboard_setup()
@@ -17,7 +17,7 @@ class SharedClipboard {
             if (isRunning) {
                 JniBridge.shared_clipboard_stop_thread()
             }
-            val newConfig = JniBridge.shared_clipboard_config_new(url, token, name)
+            val newConfig = JniBridge.shared_clipboard_config_new(endpoint, token, name)
             JniBridge.shared_clipboard_start_thread(newConfig)
             config = newConfig
             isRunning = true

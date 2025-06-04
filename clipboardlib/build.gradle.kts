@@ -165,7 +165,7 @@ tasks.named("clean").configure {
             println("Deleting CMake cache: $cxxDir")
             cxxDir.deleteRecursively()
         } else {
-            println("No CMake cache to delete at ${cxxDir}")
+            println("No CMake cache to delete at $cxxDir")
         }
     }
 }
