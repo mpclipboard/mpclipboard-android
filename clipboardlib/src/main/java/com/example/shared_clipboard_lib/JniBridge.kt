@@ -1,8 +1,10 @@
 package com.example.shared_clipboard_lib
 
+import android.content.Context
+
 internal class JniBridge {
     companion object {
-        external fun shared_clipboard_setup()
+        external fun shared_clipboard_setup(context: Context)
         external fun shared_clipboard_start_thread(config: Long)
         external fun shared_clipboard_stop_thread(): Boolean
         external fun shared_clipboard_send(text: String)

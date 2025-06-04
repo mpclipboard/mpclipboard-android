@@ -18,6 +18,7 @@ material = { group = "com.google.android.material", name = "material", version.r
 androidx-runtime-android = { group = "androidx.compose.runtime", name = "runtime-android", version.ref = "runtimeAndroid" }
 androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version = "2025.05.01" }
 androidx-material3-android = { group = "androidx.compose.material3", name = "material3-android", version.ref = "material3Android" }
+rustls-platform-verifier = { group = "rustls", name = "rustls-platform-verifier", version = "latest.release" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

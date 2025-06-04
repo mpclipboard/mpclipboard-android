@@ -16,6 +16,10 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
+        maven {
+            url = uri("rustls-platform-verifier-android")
+            metadataSources.artifact()
+        }
     }
 }
 

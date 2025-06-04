@@ -1,5 +1,9 @@
 package com.example.shared_clipboard_lib
 
+import android.content.Context
+import android.content.SharedPreferences
+import androidx.core.content.edit
+
 class SharedClipboard {
     companion object {
         private var isInitialized = false
@@ -7,11 +11,11 @@ class SharedClipboard {
         private var config: Long? = null
         private var poller: Poller? = null
 
-        fun reconfigure(endpoint: String, token: String, name: String) {
+        fun reconfigure(context: Context, endpoint: String, token: String, name: String) {
             if (!isInitialized) {
                 log("initializing")
                 JniBridge.init()
-                JniBridge.shared_clipboard_setup()
+                JniBridge.shared_clipboard_setup(context)
                 isInitialized = true
                 log("initialization completed")
             }
@@ -27,6 +31,27 @@ class SharedClipboard {
             log("thread has started")
             config = newConfig
             isRunning = true
+        }
+
+        private fun prefs(context: Context): SharedPreferences {
+            return context.getSharedPreferences("shared_clipboard_prefs", Context.MODE_PRIVATE)
+        }
+
+        fun loadPref(context: Context, key: String): String {
+            return prefs(context).getString(key, "") ?: ""
+        }
+
+        fun savePrefs(context: Context, endpoint: String, token: String) {
+            prefs(context).edit {
+                putString("endpoint", endpoint)
+                putString("token", token)
+            }
+        }
+
+        fun reconfigure(context: Context, name: String) {
+            val endpoint = loadPref(context, "endpoint")
+            val token = loadPref(context, "token")
+            reconfigure(context, endpoint, token, name)
         }
 
         fun stop() {

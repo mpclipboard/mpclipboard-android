@@ -5,8 +5,14 @@
 
 #define MAYBE_UNUSED __attribute__((unused))
 
-JNIEXPORT void JNICALL j_shared_clipboard_setup(MAYBE_UNUSED JNIEnv* env, MAYBE_UNUSED jclass klass) {
+void shared_clipboard_setup_rustls_on_jvm(JNIEnv *env, jobject context);
+
+JNIEXPORT void JNICALL j_shared_clipboard_setup(
+        JNIEnv* env,
+        MAYBE_UNUSED jclass klass,
+        jobject context) {
     shared_clipboard_setup();
+    shared_clipboard_setup_rustls_on_jvm(env, context);
 }
 
 JNIEXPORT jlong JNICALL j_shared_clipboard_config_new(

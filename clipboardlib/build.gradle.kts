@@ -58,6 +58,7 @@ dependencies {
     implementation(libs.androidx.foundation)
     implementation(libs.androidx.foundation.layout)
     implementation(libs.androidx.material3.android)
+    implementation(libs.rustls.platform.verifier)
 
     debugImplementation(libs.androidx.ui.tooling)
 }
