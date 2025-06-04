@@ -13,7 +13,7 @@ android {
     compileSdk = 35
 
     defaultConfig {
-        minSdk = 34
+        minSdk = 24
 
         ndk {
             //noinspection ChromeOsAbiSupport
