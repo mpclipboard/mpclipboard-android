@@ -5,6 +5,7 @@ import java.util.zip.GZIPInputStream
 plugins {
     id("com.android.library")
     alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.kotlin.compose)
 }
 
 android {
@@ -36,6 +37,9 @@ android {
     kotlinOptions {
         jvmTarget = "11"
     }
+    buildFeatures {
+        compose = true
+    }
 
     externalNativeBuild {
         cmake {
@@ -48,7 +52,14 @@ dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
-//    debugImplementation(libs.androidx.ui.tooling)
+    implementation(libs.androidx.runtime.android)
+    implementation(platform(libs.androidx.compose.bom))
+    implementation(libs.androidx.ui)
+    implementation(libs.androidx.foundation)
+    implementation(libs.androidx.foundation.layout)
+    implementation(libs.androidx.material3.android)
+
+    debugImplementation(libs.androidx.ui.tooling)
 }
 
 val downloadFile: (url: String, target: File) -> Unit = { url, target ->
