@@ -3,7 +3,7 @@ package com.example.shared_clipboard_lib
 import android.content.Context
 import android.content.SharedPreferences
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -29,12 +29,19 @@ fun SettingsScreen(modifier: Modifier = Modifier) {
     var connectivity by remember { mutableStateOf(false) }
     var last5Messages by remember { mutableStateOf(List(5) { "" }) }
 
-    LaunchedEffect(Unit) {
+    DisposableEffect(Unit) {
+        log("starting SettingsScreen effect")
         SharedClipboard.reconfigure(endpoint, token, serviceName)
         SharedClipboard.startPolling(
             onConnectivityChanged = { connectivity = it },
             onClipboardChanged = { last5Messages = last5Messages.drop(1) + it }
         )
+
+        onDispose {
+            log("stopping SettingsScreen effect")
+            SharedClipboard.stopPolling()
+            SharedClipboard.stop()
+        }
     }
 
     StatelessSettingsScreen(

@@ -11,6 +11,7 @@ internal class Poller(
     private val pollRunnable = object : Runnable {
         override fun run() {
             val output = JniBridge.shared_clipboard_poll()
+            log("polling got output: $output")
             if (output.connectivity != null) {
                 onConnectivityChanged(output.connectivity)
             }
