@@ -10,9 +10,9 @@ message(PREBUILT_DIR="${PREBUILT_DIR}")
 include_directories(${PREBUILT_DIR}/include)
 
 # Declare the prebuilt static library (.a file)
-add_library(shared_clipboard_client STATIC IMPORTED)
-set_target_properties(shared_clipboard_client PROPERTIES
-        IMPORTED_LOCATION ${PREBUILT_DIR}/lib/libshared_clipboard_client_generic.a
+add_library(mpclipboard STATIC IMPORTED)
+set_target_properties(mpclipboard PROPERTIES
+        IMPORTED_LOCATION ${PREBUILT_DIR}/lib/libmpclipboard_generic_client.a
 )
 
 # Your JNI shared lib (use your actual source file name here)
@@ -22,6 +22,6 @@ add_library(clipboardjni SHARED
 
 # Link JNI wrapper with the static library and Android log
 target_link_libraries(clipboardjni
-        shared_clipboard_client
+        mpclipboard
         log
 )

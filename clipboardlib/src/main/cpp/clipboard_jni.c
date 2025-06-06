@@ -1,21 +1,21 @@
 #include <jni.h>
 #include <stdlib.h>
-#include "shared-clipboard-generic-client.h"
+#include "mpclipboard-generic-client.h"
 #include "jni_aliases.h"
 
 #define MAYBE_UNUSED __attribute__((unused))
 
-void shared_clipboard_setup_rustls_on_jvm(JNIEnv *env, jobject context);
+void mpclipboard_setup_rustls_on_jvm(JNIEnv *env, jobject context);
 
-JNIEXPORT void JNICALL j_shared_clipboard_setup(
+JNIEXPORT void JNICALL j_mpclipboardSetup(
         JNIEnv* env,
         MAYBE_UNUSED jclass klass,
         jobject context) {
-    shared_clipboard_setup();
-    shared_clipboard_setup_rustls_on_jvm(env, context);
+    mpclipboard_setup();
+    mpclipboard_setup_rustls_on_jvm(env, context);
 }
 
-JNIEXPORT jlong JNICALL j_shared_clipboard_config_new(
+JNIEXPORT jlong JNICALL j_mpclipboardConfigNew(
         JNIEnv* env,
         MAYBE_UNUSED jclass klass,
         jstring j_url,
@@ -25,7 +25,7 @@ JNIEXPORT jlong JNICALL j_shared_clipboard_config_new(
     const char* token = (*env)->GetStringUTFChars(env, j_token, 0);
     const char* name = (*env)->GetStringUTFChars(env, j_name, 0);
 
-    shared_clipboard_config_t *config = shared_clipboard_config_new(
+    mpclipboard_config_t *config = mpclipboard_config_new(
             (const uint8_t*)url,
             (const uint8_t*)token,
             (const uint8_t*)name);
@@ -37,23 +37,23 @@ JNIEXPORT jlong JNICALL j_shared_clipboard_config_new(
     return (jlong)(uintptr_t)config;
 }
 
-JNIEXPORT void JNICALL j_shared_clipboard_start_thread(MAYBE_UNUSED JNIEnv *env, MAYBE_UNUSED jobject klass, jlong j_config) {
-    shared_clipboard_config_t *config = (shared_clipboard_config_t*)j_config;
-    shared_clipboard_start_thread(config);
+JNIEXPORT void JNICALL j_mpclipboardStartThread(MAYBE_UNUSED JNIEnv *env, MAYBE_UNUSED jobject klass, jlong j_config) {
+    mpclipboard_config_t *config = (mpclipboard_config_t*)j_config;
+    mpclipboard_start_thread(config);
 }
 
-JNIEXPORT jboolean JNICALL j_shared_clipboard_stop_thread(MAYBE_UNUSED JNIEnv *env, MAYBE_UNUSED jobject klass) {
-    return shared_clipboard_stop_thread();
+JNIEXPORT jboolean JNICALL j_mpclipboardStopThread(MAYBE_UNUSED JNIEnv *env, MAYBE_UNUSED jobject klass) {
+    return mpclipboard_stop_thread();
 }
 
-JNIEXPORT void JNICALL j_shared_clipboard_send(JNIEnv *env, MAYBE_UNUSED jobject klass, jstring j_text) {
+JNIEXPORT void JNICALL j_mpclipboardSend(JNIEnv *env, MAYBE_UNUSED jobject klass, jstring j_text) {
     const char* text = (*env)->GetStringUTFChars(env, j_text, 0);
-    shared_clipboard_send((const uint8_t *)text);
+    mpclipboard_send((const uint8_t *)text);
     (*env)->ReleaseStringUTFChars(env, j_text, text);
 }
 
-JNIEXPORT jobject JNICALL j_shared_clipboard_poll(JNIEnv *env, MAYBE_UNUSED jobject klass) {
-    shared_clipboard_output_t out = shared_clipboard_poll();
+JNIEXPORT jobject JNICALL j_mpclipboardPoll(JNIEnv *env, MAYBE_UNUSED jobject klass) {
+    mpclipboard_output_t out = mpclipboard_poll();
 
     jstring j_text = NULL;
     if (out.text != NULL) {

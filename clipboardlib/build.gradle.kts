@@ -58,7 +58,7 @@ dependencies {
     implementation(libs.androidx.foundation)
     implementation(libs.androidx.foundation.layout)
     implementation(libs.androidx.material3.android)
-    implementation(libs.rustls.platform.verifier)
+    implementation(libs.mpclipboard.rustls.platform.verifier)
 
     debugImplementation(libs.androidx.ui.tooling)
 }
@@ -75,14 +75,14 @@ val downloadFile: (url: String, target: File) -> Unit = { url, target ->
     }
 }
 
-val releaseUrl = "https://github.com/iliabylich/shared-clipboard-client-generic/releases/download/latest"
+val releaseUrl = "https://github.com/mpclipboard/generic-client/releases/download/latest"
 val archiveUrl = "$releaseUrl/aarch64-linux-android.tar.gz"
-val headerUrl = "$releaseUrl/shared-clipboard-client-generic.h"
+val headerUrl = "$releaseUrl/mpclipboard-generic-client.h"
 
 val downloadAndExtractPrebuilt by tasks.registering {
     val outputDir = layout.buildDirectory.dir("native/prebuilt")
     val archiveFile = outputDir.get().file("aarch64-linux-android.tar.gz")
-    val headerFile = outputDir.get().file("include/shared-clipboard-generic-client.h")
+    val headerFile = outputDir.get().file("include/mpclipboard-generic-client.h")
 
     outputs.dir(outputDir)
 

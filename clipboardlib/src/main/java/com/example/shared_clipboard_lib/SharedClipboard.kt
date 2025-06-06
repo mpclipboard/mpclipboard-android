@@ -15,19 +15,19 @@ class SharedClipboard {
             if (!isInitialized) {
                 log("initializing")
                 JniBridge.init()
-                JniBridge.shared_clipboard_setup(context)
+                JniBridge.mpclipboardSetup(context)
                 isInitialized = true
                 log("initialization completed")
             }
 
             if (isRunning) {
                 log("stopping currently running thread...")
-                JniBridge.shared_clipboard_stop_thread()
+                JniBridge.mpclipboardStopThread()
             }
             log("creating config with $endpoint / $name")
-            val newConfig = JniBridge.shared_clipboard_config_new(endpoint, token, name)
+            val newConfig = JniBridge.mpclipboardConfigNew(endpoint, token, name)
             log("config has been created, starting thread...")
-            JniBridge.shared_clipboard_start_thread(newConfig)
+            JniBridge.mpclipboardStartThread(newConfig)
             log("thread has started")
             config = newConfig
             isRunning = true
@@ -56,13 +56,13 @@ class SharedClipboard {
 
         fun stop() {
             if (isRunning) {
-                JniBridge.shared_clipboard_stop_thread()
+                JniBridge.mpclipboardStopThread()
                 isRunning = false
             }
         }
 
         fun send(text: String) {
-            JniBridge.shared_clipboard_send(text)
+            JniBridge.mpclipboardSend(text)
         }
 
         fun startPolling(

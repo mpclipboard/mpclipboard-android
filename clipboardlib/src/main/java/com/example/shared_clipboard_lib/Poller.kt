@@ -10,7 +10,7 @@ internal class Poller(
     private val handler = Handler(Looper.getMainLooper())
     private val pollRunnable = object : Runnable {
         override fun run() {
-            val output = JniBridge.shared_clipboard_poll()
+            val output = JniBridge.mpclipboardPoll()
             if (output.connectivity != null) {
                 log("connectivity changed: ${output.connectivity}")
                 onConnectivityChanged(output.connectivity)
