@@ -15,23 +15,23 @@ const val serviceName = "mpclipboard-settings"
 fun SettingsScreen(modifier: Modifier = Modifier) {
     val context = LocalContext.current
 
-    var endpoint by remember { mutableStateOf(SharedClipboard.loadPref(context, "endpoint")) }
-    var token by remember { mutableStateOf(SharedClipboard.loadPref(context, "token")) }
+    var endpoint by remember { mutableStateOf(MPClipboard.loadPref(context, "endpoint")) }
+    var token by remember { mutableStateOf(MPClipboard.loadPref(context, "token")) }
     var connectivity by remember { mutableStateOf(false) }
     var last5Messages by remember { mutableStateOf(List(5) { "" }) }
 
     DisposableEffect(Unit) {
         log("starting SettingsScreen effect")
-        SharedClipboard.reconfigure(context, endpoint, token, serviceName)
-        SharedClipboard.startPolling(
+        MPClipboard.reconfigure(context, endpoint, token, serviceName)
+        MPClipboard.startPolling(
             onConnectivityChanged = { connectivity = it },
             onClipboardChanged = { last5Messages = last5Messages.drop(1) + it }
         )
 
         onDispose {
             log("stopping SettingsScreen effect")
-            SharedClipboard.stopPolling()
-            SharedClipboard.stop()
+            MPClipboard.stopPolling()
+            MPClipboard.stop()
         }
     }
 
@@ -41,8 +41,8 @@ fun SettingsScreen(modifier: Modifier = Modifier) {
         token = token,
         setToken = { token = it },
         onSubmit = {
-            SharedClipboard.savePrefs(context, endpoint, token)
-            SharedClipboard.reconfigure(context, endpoint, token, serviceName)
+            MPClipboard.savePrefs(context, endpoint, token)
+            MPClipboard.reconfigure(context, endpoint, token, serviceName)
         },
         connectivity = connectivity,
         last5Messages = last5Messages,

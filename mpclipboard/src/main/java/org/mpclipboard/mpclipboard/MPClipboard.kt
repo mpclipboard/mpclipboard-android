@@ -4,7 +4,7 @@ import android.content.Context
 import android.content.SharedPreferences
 import androidx.core.content.edit
 
-class SharedClipboard {
+class MPClipboard {
     companion object {
         private var isInitialized = false
         private var isRunning = false
