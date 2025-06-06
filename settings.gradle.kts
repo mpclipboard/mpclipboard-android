@@ -20,6 +20,6 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "shared-clipboard-lib"
-include(":clipboardlib")
+rootProject.name = "mpclipboard"
+include(":mpclipboard")
  

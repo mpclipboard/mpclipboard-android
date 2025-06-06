@@ -9,7 +9,7 @@ plugins {
 }
 
 android {
-    namespace = "com.example.shared_clipboard_lib"
+    namespace = "org.mpclipboard.mpclipboard"
     compileSdk = 35
 
     defaultConfig {
@@ -108,7 +108,7 @@ val downloadAndExtractPrebuilt by tasks.registering {
 }
 
 val generateJniDefines by tasks.registering {
-    val inputKtFile = file("src/main/java/com/example/shared_clipboard_lib/JniBridge.kt")
+    val inputKtFile = file("src/main/java/org/mpclipboard/mpclipboard/JniBridge.kt")
     val outputHeader = layout.buildDirectory.file("native/prebuilt/include/jni_aliases.h")
 
     inputs.file(inputKtFile)
@@ -127,7 +127,7 @@ val generateJniDefines by tasks.registering {
         val defines = regex.findAll(fileContent).map { match ->
             val methodName = match.groupValues[1]
 
-            val packageParts = listOf("com", "example", "shared_clipboard_lib").map(::jniMangle)
+            val packageParts = listOf("org", "mpclipboard", "mpclipboard").map(::jniMangle)
             val className = jniMangle("JniBridge\$Companion")  // explicitly encode $Companion
 
             val jniSymbol = buildString {

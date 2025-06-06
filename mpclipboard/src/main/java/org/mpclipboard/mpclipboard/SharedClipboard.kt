@@ -1,4 +1,4 @@
-package com.example.shared_clipboard_lib
+package org.mpclipboard.mpclipboard
 
 import android.content.Context
 import android.content.SharedPreferences
@@ -34,7 +34,7 @@ class SharedClipboard {
         }
 
         private fun prefs(context: Context): SharedPreferences {
-            return context.getSharedPreferences("shared_clipboard_prefs", Context.MODE_PRIVATE)
+            return context.getSharedPreferences("mpclipboard-prefs", Context.MODE_PRIVATE)
         }
 
         fun loadPref(context: Context, key: String): String {

@@ -69,7 +69,7 @@ JNIEXPORT jobject JNICALL j_mpclipboardPoll(JNIEnv *env, MAYBE_UNUSED jobject kl
         free(out.connectivity);
     }
 
-    jclass cls = (*env)->FindClass(env, "com/example/shared_clipboard_lib/PollOutput");
+    jclass cls = (*env)->FindClass(env, "org/mpclipboard/mpclipboard/PollOutput");
     jmethodID ctor = (*env)->GetMethodID(env, cls, "<init>", "(Ljava/lang/String;Ljava/lang/Boolean;)V");
 
     jobject result = (*env)->NewObject(env, cls, ctor, j_text, j_connectivity);

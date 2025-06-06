@@ -1,4 +1,4 @@
-package com.example.shared_clipboard_lib
+package org.mpclipboard.mpclipboard
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview

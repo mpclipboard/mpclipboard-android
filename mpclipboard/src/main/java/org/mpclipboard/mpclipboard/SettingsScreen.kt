@@ -1,4 +1,4 @@
-package com.example.shared_clipboard_lib
+package org.mpclipboard.mpclipboard
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
@@ -9,7 +9,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 
-const val serviceName = "shared-clipboard-settings"
+const val serviceName = "mpclipboard-settings"
 
 @Composable
 fun SettingsScreen(modifier: Modifier = Modifier) {

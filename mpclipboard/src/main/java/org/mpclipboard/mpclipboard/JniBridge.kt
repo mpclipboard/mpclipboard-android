@@ -1,4 +1,4 @@
-package com.example.shared_clipboard_lib
+package org.mpclipboard.mpclipboard
 
 import android.content.Context
 

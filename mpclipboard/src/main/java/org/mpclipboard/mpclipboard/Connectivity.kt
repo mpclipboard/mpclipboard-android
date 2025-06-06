@@ -1,4 +1,4 @@
-package com.example.shared_clipboard_lib
+package org.mpclipboard.mpclipboard
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
