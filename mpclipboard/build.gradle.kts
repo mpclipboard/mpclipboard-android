@@ -59,8 +59,11 @@ dependencies {
     implementation(libs.androidx.foundation.layout)
     implementation(libs.androidx.material3.android)
     implementation(libs.mpclipboard.rustls.platform.verifier)
+    implementation(libs.androidx.glance.appwidget)
 
     debugImplementation(libs.androidx.ui.tooling)
+    debugImplementation(libs.androidx.glance.preview)
+    debugImplementation(libs.androidx.glance.appwidget.preview)
 }
 
 val downloadFile: (url: String, target: File) -> Unit = { url, target ->
