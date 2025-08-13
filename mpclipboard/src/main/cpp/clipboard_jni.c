@@ -26,7 +26,6 @@ JNIEXPORT jlong JNICALL j_mpclipboardConfigNew(
     const char* name = (*env)->GetStringUTFChars(env, j_name, 0);
 
     mpclipboard_config_t *config = mpclipboard_config_new(uri, token, name);
-
     (*env)->ReleaseStringUTFChars(env, j_uri, uri);
     (*env)->ReleaseStringUTFChars(env, j_token, token);
     (*env)->ReleaseStringUTFChars(env, j_name, name);
