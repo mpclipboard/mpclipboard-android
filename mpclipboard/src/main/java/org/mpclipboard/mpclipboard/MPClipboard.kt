@@ -8,6 +8,7 @@ class MPClipboard(uri: String, token: String, name: String) {
 
         fun init(context: Context) {
             if (!isInitialized) {
+                isInitialized = true
                 log("initializing")
                 JniBridge.init()
                 JniBridge.mpclipboardSetup(context)
