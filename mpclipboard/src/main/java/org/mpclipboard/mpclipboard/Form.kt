@@ -13,15 +13,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
 @Composable
-internal fun Form(endpoint: String, setEndpoint: (String) -> Unit, token: String, setToken: (String) -> Unit, onSubmit: () -> Unit) {
+internal fun Form(uri: String, setURI: (String) -> Unit, token: String, setToken: (String) -> Unit, onSubmit: () -> Unit) {
     Column(verticalArrangement = Arrangement.spacedBy(20.dp)) {
         Text(text = "Settings", style = MaterialTheme.typography.headlineMedium)
 
-        Text(text = "Endpoint")
+        Text(text = "URI")
         TextField(
-            value = endpoint,
-            onValueChange = setEndpoint,
-            placeholder = { Text(text = "Enter endpoint") },
+            value = uri,
+            onValueChange = setURI,
+            placeholder = { Text(text = "Enter URI") },
             modifier = Modifier.fillMaxWidth()
         )
 

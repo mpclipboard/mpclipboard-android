@@ -9,3 +9,6 @@ push:
     git push --delete origin "{{tag}}" || true
     git tag "{{tag}}"
     git push origin "{{tag}}"
+
+rebuild:
+    ./gradlew build --refresh-dependencies

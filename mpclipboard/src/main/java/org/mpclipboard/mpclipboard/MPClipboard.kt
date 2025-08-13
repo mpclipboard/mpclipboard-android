@@ -1,82 +1,46 @@
 package org.mpclipboard.mpclipboard
 
 import android.content.Context
-import android.content.SharedPreferences
-import androidx.core.content.edit
 
-class MPClipboard {
+class MPClipboard(uri: String, token: String, name: String) {
     companion object {
         private var isInitialized = false
-        private var isRunning = false
-        private var config: Long? = null
-        private var poller: Poller? = null
 
-        fun reconfigure(context: Context, endpoint: String, token: String, name: String) {
+        fun init(context: Context) {
             if (!isInitialized) {
                 log("initializing")
                 JniBridge.init()
                 JniBridge.mpclipboardSetup(context)
-                isInitialized = true
                 log("initialization completed")
             }
-
-            if (isRunning) {
-                log("stopping currently running thread...")
-                JniBridge.mpclipboardStopThread()
-            }
-            log("creating config with $endpoint / $name")
-            val newConfig = JniBridge.mpclipboardConfigNew(endpoint, token, name)
-            log("config has been created, starting thread...")
-            JniBridge.mpclipboardStartThread(newConfig)
-            log("thread has started")
-            config = newConfig
-            isRunning = true
         }
+    }
 
-        private fun prefs(context: Context): SharedPreferences {
-            return context.getSharedPreferences("mpclipboard-prefs", Context.MODE_PRIVATE)
-        }
+    private var config: Long
+    private var handle: Long
+    var fd: Long
 
-        fun loadPref(context: Context, key: String): String {
-            return prefs(context).getString(key, "") ?: ""
-        }
+    init {
+        log("creating config with $uri / $name")
+        config = JniBridge.mpclipboardConfigNew(uri, token, name)
+        log("starting thread...")
+        handle = JniBridge.mpclipboardStartThread(config)
+        fd = JniBridge.mpclipboardTakeFd(handle)
+    }
 
-        fun savePrefs(context: Context, endpoint: String, token: String) {
-            prefs(context).edit {
-                putString("endpoint", endpoint)
-                putString("token", token)
-            }
-        }
+    fun stop() {
+        log("stopping thread...")
+        JniBridge.mpclipboardStopThread(handle)
+        poller?.stop()
+    }
 
-        fun reconfigure(context: Context, name: String) {
-            val endpoint = loadPref(context, "endpoint")
-            val token = loadPref(context, "token")
-            reconfigure(context, endpoint, token, name)
-        }
+    fun send(text: String): Boolean {
+        return JniBridge.mpclipboardSend(handle, text)
+    }
 
-        fun stop() {
-            if (isRunning) {
-                JniBridge.mpclipboardStopThread()
-                isRunning = false
-            }
-        }
-
-        fun send(text: String) {
-            JniBridge.mpclipboardSend(text)
-        }
-
-        fun startPolling(
-            onConnectivityChanged: (Boolean) -> Unit,
-            onClipboardChanged: (String) -> Unit
-        ) {
-            val poller = Poller(onConnectivityChanged, onClipboardChanged)
-            poller.start()
-            this.poller = poller
-        }
-
-        fun stopPolling() {
-            this.poller?.stop()
-            this.poller = null
-        }
+    private var poller: Poller? = null
+    fun startPolling(onConnectivityChanged: (Boolean) -> Unit, onClipboardChanged: (String) -> Unit) {
+        poller = Poller(handle, onConnectivityChanged, onClipboardChanged)
+        poller?.start()
     }
 }

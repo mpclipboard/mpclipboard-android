@@ -9,40 +9,51 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 
-const val serviceName = "mpclipboard-settings"
-
 @Composable
 fun SettingsScreen(modifier: Modifier = Modifier) {
     val context = LocalContext.current
+    val prefs = Prefs(context)
 
-    var endpoint by remember { mutableStateOf(MPClipboard.loadPref(context, "endpoint")) }
-    var token by remember { mutableStateOf(MPClipboard.loadPref(context, "token")) }
+    var uri by remember { mutableStateOf(prefs.readURI()) }
+    var token by remember { mutableStateOf(prefs.readToken()) }
+    var mpclipboard by remember { mutableStateOf<MPClipboard?>(null) }
+
     var connectivity by remember { mutableStateOf(false) }
     var last5Messages by remember { mutableStateOf(List(5) { "" }) }
 
-    DisposableEffect(Unit) {
-        log("starting SettingsScreen effect")
-        MPClipboard.reconfigure(context, endpoint, token, serviceName)
-        MPClipboard.startPolling(
+    fun disconnect() {
+        log("disconnecting...")
+        mpclipboard?.stop()
+        mpclipboard = null
+    }
+
+    fun connect() {
+        log("connecting...")
+        mpclipboard = MPClipboard(uri, token, "mpclipboard-android-settings")
+        mpclipboard?.startPolling(
             onConnectivityChanged = { connectivity = it },
             onClipboardChanged = { last5Messages = last5Messages.drop(1) + it }
         )
+    }
+
+    DisposableEffect(Unit) {
+        connect()
 
         onDispose {
-            log("stopping SettingsScreen effect")
-            MPClipboard.stopPolling()
-            MPClipboard.stop()
+            disconnect()
         }
     }
 
     StatelessSettingsScreen(
-        endpoint = endpoint,
-        setEndpoint = { endpoint = it },
+        uri = uri,
+        setURI = { uri = it },
         token = token,
         setToken = { token = it },
         onSubmit = {
-            MPClipboard.savePrefs(context, endpoint, token)
-            MPClipboard.reconfigure(context, endpoint, token, serviceName)
+            prefs.writeURI(uri)
+            prefs.writeToken(token)
+            disconnect()
+            connect()
         },
         connectivity = connectivity,
         last5Messages = last5Messages,

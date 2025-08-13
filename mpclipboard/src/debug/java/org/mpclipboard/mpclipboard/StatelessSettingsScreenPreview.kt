@@ -7,8 +7,8 @@ import androidx.compose.ui.tooling.preview.Preview
 @Composable
 internal fun StatelessSettingsScreenPreview() {
     StatelessSettingsScreen(
-        endpoint = "ws://localhost:3000",
-        setEndpoint = {},
+        uri = "ws://localhost:3000",
+        setURI = {},
         token = "test-token-123",
         setToken = {},
         onSubmit = {},

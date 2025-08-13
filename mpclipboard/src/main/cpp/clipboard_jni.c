@@ -11,49 +11,51 @@ JNIEXPORT void JNICALL j_mpclipboardSetup(
         JNIEnv* env,
         MAYBE_UNUSED jclass klass,
         jobject context) {
-    mpclipboard_setup();
+    mpclipboard_init();
     mpclipboard_setup_rustls_on_jvm(env, context);
 }
 
 JNIEXPORT jlong JNICALL j_mpclipboardConfigNew(
         JNIEnv* env,
         MAYBE_UNUSED jclass klass,
-        jstring j_url,
+        jstring j_uri,
         jstring j_token,
         jstring j_name) {
-    const char* url = (*env)->GetStringUTFChars(env, j_url, 0);
+    const char* uri = (*env)->GetStringUTFChars(env, j_uri, 0);
     const char* token = (*env)->GetStringUTFChars(env, j_token, 0);
     const char* name = (*env)->GetStringUTFChars(env, j_name, 0);
 
-    mpclipboard_config_t *config = mpclipboard_config_new(
-            (const uint8_t*)url,
-            (const uint8_t*)token,
-            (const uint8_t*)name);
+    mpclipboard_config_t *config = mpclipboard_config_new(uri, token, name);
 
-    (*env)->ReleaseStringUTFChars(env, j_url, url);
+    (*env)->ReleaseStringUTFChars(env, j_uri, uri);
     (*env)->ReleaseStringUTFChars(env, j_token, token);
     (*env)->ReleaseStringUTFChars(env, j_name, name);
 
     return (jlong)(uintptr_t)config;
 }
 
-JNIEXPORT void JNICALL j_mpclipboardStartThread(MAYBE_UNUSED JNIEnv *env, MAYBE_UNUSED jobject klass, jlong j_config) {
+JNIEXPORT jlong JNICALL j_mpclipboardStartThread(MAYBE_UNUSED JNIEnv *env, MAYBE_UNUSED jobject klass, jlong j_config) {
     mpclipboard_config_t *config = (mpclipboard_config_t*)j_config;
-    mpclipboard_start_thread(config);
+    mpclipboard_handle_t *handle = mpclipboard_thread_start(config);
+    return (jlong)(uintptr_t)handle;
 }
 
-JNIEXPORT jboolean JNICALL j_mpclipboardStopThread(MAYBE_UNUSED JNIEnv *env, MAYBE_UNUSED jobject klass) {
-    return mpclipboard_stop_thread();
+JNIEXPORT jboolean JNICALL j_mpclipboardStopThread(MAYBE_UNUSED JNIEnv *env, MAYBE_UNUSED jobject klass, jlong j_handle) {
+    mpclipboard_handle_t *handle = (void*)j_handle;
+    return mpclipboard_handle_stop(handle);
 }
 
-JNIEXPORT void JNICALL j_mpclipboardSend(JNIEnv *env, MAYBE_UNUSED jobject klass, jstring j_text) {
+JNIEXPORT jboolean JNICALL j_mpclipboardSend(JNIEnv *env, MAYBE_UNUSED jobject klass, jlong j_handle, jstring j_text) {
+    mpclipboard_handle_t *handle = (void*)j_handle;
     const char* text = (*env)->GetStringUTFChars(env, j_text, 0);
-    mpclipboard_send((const uint8_t *)text);
+    bool is_new = mpclipboard_handle_send(handle, text);
     (*env)->ReleaseStringUTFChars(env, j_text, text);
+    return is_new;
 }
 
-JNIEXPORT jobject JNICALL j_mpclipboardPoll(JNIEnv *env, MAYBE_UNUSED jobject klass) {
-    mpclipboard_output_t out = mpclipboard_poll();
+JNIEXPORT jobject JNICALL j_mpclipboardPoll(JNIEnv *env, MAYBE_UNUSED jobject klass, jlong j_handle) {
+    mpclipboard_handle_t *handle = (void*)j_handle;
+    mpclipboard_output_t out = mpclipboard_handle_poll(handle);
 
     jstring j_text = NULL;
     if (out.text != NULL) {
@@ -74,4 +76,10 @@ JNIEXPORT jobject JNICALL j_mpclipboardPoll(JNIEnv *env, MAYBE_UNUSED jobject kl
 
     jobject result = (*env)->NewObject(env, cls, ctor, j_text, j_connectivity);
     return result;
+}
+
+JNIEXPORT jlong JNICALL j_mpclipboardTakeFd(JNIEnv *env, MAYBE_UNUSED jobject klass, jlong j_handle) {
+    mpclipboard_handle_t *handle = (void*)j_handle;
+    int fd = mpclipboard_handle_take_fd(handle);
+    return fd;
 }

@@ -9,8 +9,8 @@ import androidx.compose.foundation.layout.padding
 
 @Composable
 internal fun StatelessSettingsScreen(
-    endpoint: String,
-    setEndpoint: (String) -> Unit,
+    uri: String,
+    setURI: (String) -> Unit,
     token: String,
     setToken: (String) -> Unit,
     onSubmit: () -> Unit,
@@ -23,8 +23,8 @@ internal fun StatelessSettingsScreen(
         verticalArrangement = Arrangement.spacedBy(15.dp)
     ) {
         Form(
-            endpoint = endpoint,
-            setEndpoint = setEndpoint,
+            uri = uri,
+            setURI = setURI,
             token = token,
             setToken = setToken,
             onSubmit = onSubmit

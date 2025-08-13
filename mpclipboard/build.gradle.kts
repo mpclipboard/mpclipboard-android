@@ -78,7 +78,7 @@ val downloadFile: (url: String, target: File) -> Unit = { url, target ->
     }
 }
 
-val releaseUrl = "https://github.com/mpclipboard/generic-client/releases/download/latest"
+val releaseUrl = "https://github.com/mpclipboard/generic-client/releases/download/v0.1.0"
 val archiveUrl = "$releaseUrl/aarch64-linux-android.tar.gz"
 val headerUrl = "$releaseUrl/mpclipboard-generic-client.h"
 
