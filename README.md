@@ -25,6 +25,22 @@ Additionally the library provides:
 1. settings screen written in Jetpack Compose that can be rendered in the target IME app
 2. connectivity widget for your Home Screen
 
+<details>
+
+<summary>Settings screen</summary>
+
+![settings](/assets/settings.jpg)
+
+</details>
+
+<details>
+
+<summary>Widget</summary>
+
+![widget](/assets/widget.jpg)
+
+</details>
+
 ### Integration into existing IME app
 
 In short, the API is not only designed to be minimal but also to have as few interactions with existing code as possible:
